@@ -53,3 +53,7 @@ def grocery_program(grocery_list):
             print("Invalid option. Please try again.")
 
 grocery_program(grocery_list)
+
+"""
+hi! well done! very unique approach by using the number of the item to remove it, this does prevent errors well. you did a perfect job with error handling and input validation :D
+"""
