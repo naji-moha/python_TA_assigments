@@ -2,10 +2,10 @@ import random
 
 # Create a dictionary to represent zones and items in each zone
 zones = {
-    'Candy Land': ['power candy', 'battery boost', 'short circuit'],
-    'Robotropolis': ['battery boost', 'short circuit', 'power candy'],
-    'Circuit City': ['short circuit', 'battery boost', 'power candy'],
-    'Gadget Galaxy': ['power candy', 'short circuit'],
+    1: {'name': 'Candy Land', 'items': ['power candy', 'battery boost', 'short circuit']},
+    2: {'name': 'Robotropolis', 'items': ['battery boost', 'short circuit', 'power candy']},
+    3: {'name': 'Circuit City', 'items': ['short circuit', 'battery boost', 'power candy']},
+    4: {'name': 'Gadget Galaxy', 'items': ['power candy', 'short circuit']},
 }
 
 # Initial robot status
@@ -15,16 +15,17 @@ total_power_candies = 4  # Total power candies to collect
 power_candies_collected = 0  # Counter for collected power candies
 
 # Function to move the robot to a new zone and search for items
-def move_to_zone(zone):
+def move_to_zone(zone_num):
     global battery_level, power_candies_collected
     if battery_level <= 0:
-        print("What are you waiting? Battery dead. Game over!")
+        print("What are you waiting for? Battery dead. Game over!")
         return False
     
-    print(f"\nExploring {zone}...")
+    zone_name = zones[zone_num]['name']
+    print(f"\nExploring {zone_name}...")
 
     # Randomly select an item from the zone
-    item = random.choice(zones[zone])
+    item = random.choice(zones[zone_num]['items'])
     print(f"Item found: {item}")
     
     if item == 'power candy':
@@ -34,7 +35,7 @@ def move_to_zone(zone):
         print("Oops! Short circuit! Battery drained by 3 units.")
     elif item == 'battery boost':
         battery_level += 2
-        print("Yaay battery boost found! Battery recharged by 2 units.")
+        print("Yay! Battery boost found! Battery recharged by 2 units.")
     
     battery_level -= 1  # Decrease battery for moving to a zone
     print(f"Battery level: {battery_level}")
@@ -44,7 +45,7 @@ def move_to_zone(zone):
         return False
     
     if battery_level <= 0:
-        print("Battery dead. Game over! Don't come back")
+        print("Battery dead. Game over! Don't come back.")
         return False
     
     return True
@@ -57,8 +58,7 @@ def collect_item(item):
         power_candies_collected += 1
         print(f"Power candy collected! Total power candies: {power_candies_collected}")
 
-# Function to display the robot's inventory
-
+# function to display the robot's inventory
 def display_inventory():
     print(f"Inventory: {robot_inventory}")
     print(f"Power candies collected: {power_candies_collected}/{total_power_candies}")
@@ -66,22 +66,25 @@ def display_inventory():
 # Main game loop
 def play_game():
     global battery_level
-    print("Welcome to the Robot Adventure Gameee!")
+    print("Welcome to the Robot Adventure Game!")
     print(f"Collect {total_power_candies} power candies before your battery runs out.")
     
     while True:
         display_inventory()
-        print("\nZones available to explore: Candy Land, Robotropolis, Circuit City, Gadget Galaxy")
-        zone = input("Choose a zone to explore or type 'quit' to end the game: ").capitalize()
+        print("\nZones available to explore:")
+        for zone_num, zone_info in zones.items():
+            print(f"{zone_num}. {zone_info['name']}")
         
-        if zone.lower() == 'quit ducks':
+        choice = input("Choose a zone number to explore or type '0' to quit: ")
+        
+        if choice == '0':
             print("Exiting game. Thanks for playing!")
             break
-        elif zone in zones:
-            if not move_to_zone(zone):
+        elif choice.isdigit() and int(choice) in zones:
+            if not move_to_zone(int(choice)):
                 break
         else:
             print("What are you doing here? Please choose a valid zone.")
 
-# Start the game
+# Starts the game!!
 play_game()
